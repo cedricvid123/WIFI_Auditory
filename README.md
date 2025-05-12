@@ -1,5 +1,4 @@
 # WIFI_Auditory
-# Wi-Fi-security-auditor
 Wi-Fi security auditing is the process of analyzing, testing, and assessing the security posture of a wireless network to identify vulnerabilities, misconfigurations, and potential weaknesses that could be exploited by attackers.
 
 # 1. Import Required Libraries
