@@ -15,205 +15,77 @@ Explanation:
 
 ---
 
-# 2. Initialize the WiFi Interface
+## Usage Examples
+### Wi-Fi Scanning
+To scan available Wi-Fi networks:
+```bash
+python main.py
+```
 
+### Packet Capturing
+To capture handshake packets for a specific SSID:
+```bash
+python main.py
+```
+Follow the prompts to enter the SSID and begin capturing.
 
-CopyEdit
-wifi = pywifi.PyWiFi()
-iface = wifi.interfaces()[0]
+### Password Cracking
+To attempt password cracking using a captured handshake:
+```bash
+python main_crack.py
+```
+Provide the handshake file and a wordlist when prompted.
 
-Explanation:
-
-· pywifi.PyWiFi(): Initializes the WiFi manager.
-
-· wifi.interfaces()[0]: Gets the first wireless interface. If you have multiple adapters, you may need to select a different index.
-
----
-
-# 3. Start Scanning for Networks
-
-python
-CopyEdit
-iface.scan()
-print("Scanning for WiFi networks...")
-time.sleep(3) # Wait for scan results to populate
-
-Explanation:
-
-· iface.scan(): Sends a scan request to the WiFi adapter.
-
-· time.sleep(3): Allows the scan to complete and gather information. This delay is necessary because the scan runs asynchronously.
-
----
-
-# 4. Fetch the Scan Results
-
-python
-CopyEdit
-scan_results = iface.scan_results()
-
-Explanation:
-
-· iface.scan_results(): Retrieves a list of all networks found during the scan.
-
-· Each network in this list is an object containing attributes like ssid, bssid, signal, and akm.
+### Report Generation
+To generate a detailed report of findings:
+```bash
+python main.py
+```
+Select the option to generate a report. Output is saved to the `reports/` folder.
 
 ---
 
-# 5. Create a Pretty Table for Display
-
-python
-CopyEdit
-
-table = PrettyTable(["SSID (Name)", "BSSID (MAC Address)", "Signal Strength (dBm)", "Encryption Type"])
-networks = []
-
-Explanation:
-
-· PrettyTable: This library is used to format the data into a clean, readable table.
-
-· networks: A list to store all the scanned WiFi network details.
+## Component Breakdown
+- `scanner/`: Contains logic for discovering Wi-Fi networks.
+- `capture/`: Handles the packet capturing process.
+- `crack/`: Manages password cracking attempts.
+- `reports/`: Generates structured reports of the audit.
+- `ui/`: Manages user interface components.
+- `utils/`: Contains helper functions for the application.
 
 ---
 
-# 6. Loop Through Networks and Collect Data
-
-python
-CopyEdit
-for network in scan_results:
-     ssid = network.ssid
-     bssid = network.bssid
-     signal = network.signal
-     
-     # Determine encryption type
-     if network.akm:
-         encryption = " / ".join([str(akm).split('.')[-1] for akm in network.akm])
-         else:
-         encryption = "Open"
-         
-         # Append data to the list
-         networks.append({"SSID": ssid,"BSSID": bssid,"Signal": signal,"Encryption": encryption})
-         
-         # Add to the display table
-         table.add_row([ssid, bssid, signal, encryption]))
-
-Explanation:
-
-· Loops through all the networks found.
-
-· Extracts:
-    o SSID → Network name.
-    o BSSID → MAC address.
-    o Signal → Signal strength in dBm.
-    o Encryption → Security type (WPA, WPA2, Open, etc.).
-
-· Appends the data to:
-    o A list (networks) for easy access.
-    o A formatted table (table) for pretty display.
+## System Requirements
+- **OS:** Linux (Kali Linux recommended)
+- **Python Version:** 3.8 or higher
+- **Dependencies:** Listed in `requirements.txt`
+- **Tools:** 
+  - `aircrack-ng` for password cracking
+  - `tcpdump` or `airodump-ng` for packet capturing
 
 ---
 
-# 7. Display the Networks
+## Known Issues & Troubleshooting
+1. **Wi-Fi Interface Not Found:**
+   - Ensure your wireless adapter supports monitor mode.
+   - Use `ifconfig` to check available interfaces.
 
-python
-CopyEdit
-  print(table)
+2. **Handshake Not Captured:**
+   - Make sure the target network has active devices.
+   - Move closer to the access point if the signal is weak.
 
-Explanation:
-
-· This prints out the complete list of WiFi networks in a clean, readable format.
-
----
-
-# 8. Return the List of Networks
-
-python
-CopyEdit
-  return networks
-
-Explanation:
-
-· The list of networks is returned for further processing if needed.
+3. **Packet Capture Permission Denied:**
+   - Run with `sudo` or as root:
+     ```bash
+     sudo python main.py
+     ```
 
 ---
 
-# 9. Main Function Entry Point
-
-python
-CopyEdit
-if __name__ == "__main__":
-    networks = scan_wifi_networks()
-
-Explanation:
-
-· This ensures the script runs only if it is executed directly (not imported).
-
-· Calls the main function to execute the scan.
-
----
-
-Full Script: wifi_scanner.py
-
-python
-CopyEdit
-import pywifi
-from pywifi import const
-import time
-from prettytable import PrettyTable
-
-def scan_wifi_networks():
-   # Initialize the WiFi interface
-   wifi = pywifi.PyWiFi()
-   
-   iface = wifi.interfaces()[0]
-   
-   # Start scanning
-   iface.scan()
-   
-   print("Scanning for WiFi networks...")
-   
-   time.sleep(3) # Wait for scan results
-   
-   # Get scan results
-   scan_results = iface.scan_results()
-   
-   # Create a formatted table for display
-   table = PrettyTable(["SSID (Name)", "BSSID (MAC Address)", "Signal Strength (dBm)", "Encryption Type"])
-   networks = []
-   
-   for network in scan_results:
-   ssid = network.ssid
-   bssid = network.bssid
-   signal = network.signal
-   
-   # Determine encryption type
-   if network.akm:
-   encryption = " / ".join([str(akm).split('.')[-1] for akm in network.akm])
-   else:
-      encryption = "Open"
-    
-    # Append data to the list
-    networks.append({"SSID": ssid, "BSSID": bssid, "Signal": signal, "Encryption": encryption})
-    
-    # Add to the display table
-    table.add_row([ssid, bssid, signal, encryption])
-    
-    # Display the networks in table format
-    print(table)
-    
-    # Return the list of networks
-    return networks
-
-if __name__ == "__main__":
-   networks = scan_wifi_networks()
-
----
-
-# To Run the Script
-
-bash
-CopyEdit
-python wifi_scanner.py
+## Future Enhancements
+- Add WPA3 handshake support.
+- Implement de-authentication attack detection.
+- Improve rogue AP detection accuracy.
 
 ---
 
