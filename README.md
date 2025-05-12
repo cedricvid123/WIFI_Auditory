@@ -237,7 +237,7 @@ Repository Structure
 # Installation
 
 1. Clone the repository
-   git clone https://github.com/cedricvid123/wifi-security-auditor.git
+   git clone https://github.com/cedricvid123/WIFI_Auditory.git
    cd wifi-security-auditor
 
 2. Install dependencies:
