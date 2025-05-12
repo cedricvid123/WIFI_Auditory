@@ -121,21 +121,3 @@ Repository Structure
    sudo apt-get install aircrack-ng
 
 ---
-
-# Usage
-
-# To scan available Wi-Fi networks:
-
-python main.py
-
-# Cracking Passwords
-
-To initiate password cracking:
-
-python main_crack.py
-
-# Combined Capture and Crack
-
-To perform packet capturing and password cracking:
-
-python crack_and_capture.py
